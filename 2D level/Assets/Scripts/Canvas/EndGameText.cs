@@ -9,6 +9,7 @@ public class EndGameText : MonoBehaviour
 {
     [SerializeField] private UnityEvent _stopPlayer;
     [SerializeField] private UnityEvent _animateDeath;
+    [SerializeField] private UnityEvent _restarButton;
     private Text _text;
 
     private void Awake()
@@ -24,6 +25,7 @@ public class EndGameText : MonoBehaviour
         _text.color = Color.red;
 
         _stopPlayer.Invoke();
+        _restarButton.Invoke();
         _animateDeath.Invoke();
     }
 
@@ -34,5 +36,6 @@ public class EndGameText : MonoBehaviour
         _text.color = Color.yellow;
 
         _stopPlayer.Invoke();
+        _restarButton.Invoke();
     }
 }
