@@ -1,10 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 [RequireComponent(typeof(Rigidbody2D))]
-[RequireComponent(typeof(BoxCollider2D))]
+[RequireComponent(typeof(CapsuleCollider2D))]
 [RequireComponent(typeof(SpriteRenderer))]
 [RequireComponent(typeof(CharacterAnimationController))]
 public class CharacterMovement : MonoBehaviour
@@ -15,16 +14,22 @@ public class CharacterMovement : MonoBehaviour
 
     private Rigidbody2D _rigidbody2D;
     private SpriteRenderer _spriteRenderer;
-    private BoxCollider2D _boxCollider;
+    private CapsuleCollider2D _capsuleCollider2D;
     private CharacterAnimationController _characterAnimationController;
     private float _horizontalMovement;
+
+    public void StopMovement()
+    {
+        var movement = GetComponent<CharacterMovement>();
+        movement.enabled = false;
+    }
 
     private void Awake()
     {
         _rigidbody2D = transform.GetComponent<Rigidbody2D>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
-        _boxCollider = GetComponent<BoxCollider2D>();
         _characterAnimationController = GetComponent<CharacterAnimationController>();
+        _capsuleCollider2D = GetComponent<CapsuleCollider2D>();
     }
 
     private void FixedUpdate()
@@ -45,10 +50,10 @@ public class CharacterMovement : MonoBehaviour
     {
         float angle = 0f;
         float rayLength = 0.1f;
+        Vector2 feetCenter = new Vector2(_capsuleCollider2D.bounds.min.x + _capsuleCollider2D.size.x / 2, _capsuleCollider2D.bounds.min.y);
+        Vector2 feetSize = new Vector2(_capsuleCollider2D.size.x, 0.1f);
 
-        RaycastHit2D groundRay = Physics2D.BoxCast(_boxCollider.bounds.center, _boxCollider.size, angle, Vector2.down, rayLength, _layerMask);
-        Debug.DrawRay(_boxCollider.bounds.center, Vector2.down * (_boxCollider.size.y + rayLength), Color.red);
-
+        RaycastHit2D groundRay = Physics2D.BoxCast(feetCenter, feetSize, angle, Vector2.down, rayLength, _layerMask);
         return groundRay.collider != null;
     }
 

@@ -2,32 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(EnemyAnimnation))]
 public class EnemyAttack : MonoBehaviour
-{    
-    [SerializeField] private GameObject _gameEndCanvas;
-
+{
+    [SerializeField] private UnityEvent _loseGame;
     private EnemyAnimnation _enemyAnimnation;
-    private Text _gameEndText;
 
     private void Awake()
     {
-        _gameEndText = _gameEndCanvas.GetComponent<Text>();
         _enemyAnimnation = GetComponent<EnemyAnimnation>();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.TryGetComponent<CharacterMovement>(out var movement))
+        if (collision.gameObject.TryGetComponent<CharacterMovement>(out _))
         {
-            _gameEndText.text = "You lose!";
-            _gameEndText.color = Color.red;
-            _gameEndCanvas.SetActive(true);
-
+            _loseGame.Invoke();
             _enemyAnimnation.AttackEnemy();
-            collision.GetComponent<CharacterAnimationController>().Death();
-            movement.enabled = false;
         }
     }
 }
