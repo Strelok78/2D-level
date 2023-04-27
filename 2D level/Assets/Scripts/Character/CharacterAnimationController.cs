@@ -12,6 +12,11 @@ public class CharacterAnimationController : MonoBehaviour
 
     private Animator _animator;
 
+    private void Awake()
+    {
+        _animator = GetComponent<Animator>();
+    }
+
     public void Run(bool status = false)
     {
         _animator.SetBool(RunningKnightAnimationName, status);
@@ -25,10 +30,5 @@ public class CharacterAnimationController : MonoBehaviour
     public void Death()
     {
         _animator.SetTrigger(KnightDied);
-    }
-
-    private void Awake()
-    {
-        _animator = GetComponent<Animator>();
     }
 }

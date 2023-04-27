@@ -18,12 +18,6 @@ public class CharacterMovement : MonoBehaviour
     private CharacterAnimationController _characterAnimationController;
     private float _horizontalMovement;
 
-    public void StopMovement()
-    {
-        var movement = GetComponent<CharacterMovement>();
-        movement.enabled = false;
-    }
-
     private void Awake()
     {
         _rigidbody2D = transform.GetComponent<Rigidbody2D>();
@@ -46,12 +40,19 @@ public class CharacterMovement : MonoBehaviour
             _characterAnimationController.Jump(false);
     }
 
+    public void StopMovement()
+    {
+        var movement = GetComponent<CharacterMovement>();
+        movement.enabled = false;
+    }
+
     private bool IsGrounded()
     {
         float angle = 0f;
         float rayLength = 0.1f;
+        float boxCastY = 0.1f;
         Vector2 feetCenter = new Vector2(_capsuleCollider2D.bounds.min.x + _capsuleCollider2D.size.x / 2, _capsuleCollider2D.bounds.min.y);
-        Vector2 feetSize = new Vector2(_capsuleCollider2D.size.x, 0.1f);
+        Vector2 feetSize = new Vector2(_capsuleCollider2D.size.x, boxCastY);
 
         RaycastHit2D groundRay = Physics2D.BoxCast(feetCenter, feetSize, angle, Vector2.down, rayLength, _layerMask);
         return groundRay.collider != null;
